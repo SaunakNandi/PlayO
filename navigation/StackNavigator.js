@@ -11,6 +11,14 @@ import { NavigationContainer } from '@react-navigation/native'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
 import VenueInfoScreen from '../screens/VenueInfoScreen'
+import StartScreen from '../screens/StartScreen'
+import NameScreen from '../screens/NameScreen'
+import SelectImageScreen from '../screens/SelectImageScreen'
+import PreFinalscreen from '../screens/PreFinalscreen'
+import PasswordScreen from '../screens/PasswordScreen'
+import OtpScreen from '../screens/OtpScreen'
+import LoginScreen from '../screens/LoginScreen'
+import RegisterScreen from '../screens/RegisterScreen'
 const StackNavigator = () => {
     const Stack=createNativeStackNavigator()
     const Tab=createBottomTabNavigator()
@@ -58,7 +66,16 @@ const StackNavigator = () => {
     }
     const AuthStack=()=>{
         return(
-            <Stack.Navigator></Stack.Navigator>
+            <Stack.Navigator>
+                <Stack.Screen name='Start' component={StartScreen} options={{headerShown:false}}/>               
+                <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}}/>
+                <Stack.Screen name="Register" component={RegisterScreen} options={{headerShown: false}}/>
+                <Stack.Screen name="Password" component={PasswordScreen} options={{headerShown: false}}/>
+                <Stack.Screen name="Otp" component={OtpScreen} options={{headerShown: false}}/>
+                <Stack.Screen name="Name" component={NameScreen} options={{headerShown: false}}/>
+                <Stack.Screen name="Image" component={SelectImageScreen} options={{headerShown: false}}/>
+                <Stack.Screen name="PreFinal" component={PreFinalscreen} options={{headerShown: false}} />
+            </Stack.Navigator>
         )
     }
     function MainStack(){
@@ -71,7 +88,7 @@ const StackNavigator = () => {
     }
   return (
     <NavigationContainer>
-        <MainStack />
+        <AuthStack/>
     </NavigationContainer>
   )
 }
