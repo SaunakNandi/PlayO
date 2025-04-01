@@ -1,0 +1,62 @@
+const mongoose=require('mongoose')
+const Schema=mongoose.Schema
+
+const venueSchema=new Schema({
+    name:{
+        type:String,
+        required:true
+    },
+    rating:Number,
+    image:String,
+    deferLink:String,
+    fullLink:String,
+    avgRating:Number,
+    ratingCount:Number,
+    lat:Number,
+    lng:Number,
+    icon:String,
+    filter_by:[String],
+    sportsAvailable:[{
+        id:String,
+        name:String,
+        icon:String,
+        price:Number,
+        courts:[{
+            id:String,
+            name:String,
+            number:Number
+        }]
+    }],
+    location:Boolean,
+    address:{
+        type:String,
+        required:true
+    },
+    bookings:[
+        {
+            courtNumber:{
+                type:String,
+                required:true
+            },
+            date:{
+                type:Date,
+                required:true
+            },
+            time:{
+                type:Date,
+                required:true
+            },
+            user:{
+                type:mongoose.Schema.Types.ObjectId,
+                ref:'User',
+                required:true
+            },
+            game:{
+                type:mongoose.Schema.Types.ObjectId,
+                ref:'Game',
+            }
+        }
+    ]
+})
+
+module.exports=mongoose.model("Game",venueSchema)
