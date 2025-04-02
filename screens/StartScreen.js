@@ -1,9 +1,11 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useRef } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import MapView, { Marker } from 'react-native-maps'
+import { useNavigation } from '@react-navigation/native'
 
 const StartScreen = () => {
+  const navigation=useNavigation()
   const mapView=useRef(null)
   const users = [
     {
@@ -92,7 +94,8 @@ const StartScreen = () => {
     })
   },[])
   return (
-    <SafeAreaView >
+    <>
+      <SafeAreaView >
       <MapView ref={mapView} style={{width:'100%',height:400}}
       initialRegion={{
         latitude: 37.78825,
@@ -106,15 +109,54 @@ const StartScreen = () => {
             console.log('user',user)
             return (
               <Marker key={index} coordinate={point}>
-                <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                  <Image source={{uri:user?.image}} style={{width: 50,height: 50,resizeMode: 'cover',borderRadius: 5}}/>
+                <View style={{ alignItems: 'center' }}>
+                  {/* User Image */}
+                  <Image
+                    source={{ uri: user?.image }}
+                    style={{ width: 60, height: 50, resizeMode: 'cover', borderRadius: 5 }}
+                  />
+
+                  {/* Description Text */}
+                  <View
+                    style={{
+                      paddingHorizontal: 1,
+                      paddingVertical: 7,
+                      borderRadius: 7,
+                      backgroundColor: 'green',
+                      marginTop: 5, // Add margin to separate from image
+                      width: 60,
+                    }}
+                  >
+                    <Text style={{ textAlign: 'center', fontSize: 13, fontWeight: '500', color: 'white' }}>
+                      {user?.description}
+                    </Text>
+                  </View>
                 </View>
               </Marker>
             )
           })
         }
       </MapView>
-    </SafeAreaView>
+      <View style={{marginTop:35,justifyContent:'center',alignItems:'center'}}>
+        <Text style={{fontSize: 20,fontWeight: '500',width: '50%',textAlign: 'center'}}>Find Player in your neighbourhood</Text>
+        <Text style={{marginTop: 20, color: 'gray', fontSize: 15}}>Just like you did as kid!</Text>
+      </View>
+      <Pressable style={{marginTop: 40,justifyContent: 'center',alignItems: 'center',}}>
+        <Text style={{color:"gray",fontSize:16}}>Already have an account Login</Text>
+      </Pressable>
+      <View style={{justifyContent: 'center', alignItems: 'center',marginTop:25}}>
+        <Image style={{width:110,height:60,resizeMode:'contain'}}
+        source={{uri: 'https://playo-website.gumlet.io/playo-website-v2/logos-icons/new-logo-playo.png?q=50'}}/>
+      </View>
+      </SafeAreaView>
+
+      <View style={{padding:10,backgroundColor:'white',marginTop:'30'}}>
+        <Pressable style={{marginTop: 'auto',backgroundColor: '#1ec921',padding: 12,borderRadius: 7,marginBottom: 20}}
+        onPress={()=>navigation.navigate('Register')}>
+          <Text style={{textAlign: 'center', fontWeight: '500', color: 'white'}}>Ready, Set, Go</Text>
+        </Pressable>
+      </View>
+    </>
   )
 }
 
