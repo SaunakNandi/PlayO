@@ -96,6 +96,7 @@ const StartScreen = () => {
   return (
     <>
       <SafeAreaView >
+        {/* Need to check the marker image and text */}
       <MapView ref={mapView} style={{width:'100%',height:400}}
       initialRegion={{
         latitude: 37.78825,
