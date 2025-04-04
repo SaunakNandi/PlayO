@@ -4,10 +4,13 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useNavigation } from '@react-navigation/native'
+import { saveRegistrationProgress } from '../RegistrationUtils'
 const PasswordScreen = () => {
   const [password,setPassword] =useState()
   const navigation=useNavigation()
   function handleNext(){
+    if(password && password.trim()!=="")
+      saveRegistrationProgress('Password',{password})
     navigation.navigate("Name")
   }
   return (

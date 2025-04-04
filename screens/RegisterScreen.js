@@ -1,18 +1,27 @@
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
-import React,{useState} from 'react'
+import React,{useEffect, useState} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { useNavigation } from '@react-navigation/native'
+import { getRegistrationProgress, saveRegistrationProgress } from '../RegistrationUtils'
 
 const RegisterScreen = () => {
   const [email,setEmail]=useState('')
   const [checked,setChecked] = useState(false)
   const navigation=useNavigation()
-  const [nextDisabled,setNextDisabled]=useState(true)
-  const checkboxClicked=()=>{
-    setChecked(prev=>!prev)
-    console.log(nextDisabled)
-    setNextDisabled(!nextDisabled)
+  
+  useEffect(()=>{
+    getRegistrationProgress('Register')
+    .then(progressData=>{
+      if(progressData)
+        setEmail(progressData.email || '')
+    })
+  },[])
+  const next=()=>{
+    if(email.trim()!==""){
+      saveRegistrationProgress('Register',{email})
+    }
+    navigation.navigate("Password")
   }
   return (
     <SafeAreaView>
@@ -24,8 +33,7 @@ const RegisterScreen = () => {
           style={{padding: 15,borderColor: '#D0D0D0',borderWidth: 1,borderRadius: 10}}/>
 
           <Pressable style={{padding:15, borderRadius: 8,backgroundColor:email?.length>4? '#2dcf30':'#E0E0E0'}}
-          onPress={()=>navigation.navigate("Password")} disabled={!checked}>
-            {/* {console.log(!checked)} */}
+          onPress={next} disabled={!checked}>
             <Text style={{textAlign: 'center'}}>Next</Text>
           </Pressable>
         </View>
