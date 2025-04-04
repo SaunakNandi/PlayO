@@ -59,4 +59,4 @@ const venueSchema=new Schema({
     ]
 })
 
-module.exports=mongoose.model("Game",venueSchema)
+module.exports=mongoose.model("Venue",venueSchema)
