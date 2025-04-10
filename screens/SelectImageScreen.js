@@ -1,8 +1,9 @@
 import { Image, Pressable, StyleSheet, Text, View, TextInput } from 'react-native'
-import React, {useState} from 'react'
+import React, {useState,useEffect} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { useNavigation } from '@react-navigation/native'
+import { getRegistrationProgress, saveRegistrationProgress } from '../RegistrationUtils'
 
 const SelectImageScreen = () => {
   const [image,setImage]=useState()
@@ -26,7 +27,15 @@ const SelectImageScreen = () => {
     },
   ];
 
+  useEffect(()=>{
+    getRegistrationProgress('Image').then(progressData=>{
+      if(progressData)
+        setImage(progressData.image || '')
+    })
+  },[])
   const saveImage=()=>{
+    if(image.trim()!=='')
+      saveRegistrationProgress('Image',{image})
     navigation.navigate("PreFinal")
   }
   return (
