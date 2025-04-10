@@ -1,8 +1,68 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useContext,useState,useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { AuthContext } from '../AuthContext'
+import { getRegistrationProgress } from '../RegistrationUtils'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useNavigation } from '@react-navigation/native'
 
 const PreFinalscreen = () => {
+  const {token,setToken}=useContext(AuthContext)
+  const [userData,setUserData]=useState()
+  const navigate=useNavigation()
+
+  useEffect(()=>{
+    if(token)
+      navigate.replace('MainStack',{screen:"Main"})  // what it does?
+  },[token])
+  useEffect(()=>{
+    getAllScreenData()
+  },[])
+  const getAllScreenData=async()=>{
+    try {
+      const screens=['Register','Password','Name','Image']
+      let userData={}
+
+      //  looping over all the screens
+      for(const screenName of screens)
+      {
+        // gives the data stored at that perticular time for that perticular screen
+        const screenData=await getRegistrationProgress(screenName)
+        if(screenData)
+        {
+          userData={...userData,...screenData}
+        }
+      }
+      setUserData(userData)  // storing data of all the screens 
+    } catch (error) {
+      console.error("error", error)
+    }
+  }
+  const clearAllScreenData=async()=>{
+    try {
+      const screens=['Register','Password','Name','Image']
+      for(const screenName of screens)
+      {
+        const key=`registration_progress_${screenName}`
+        await AsyncStorage.removeItem(key)
+      }
+    } catch (error) {
+      console.error("error at clearAllScreenData", error)
+    }
+  }
+  const registerUser=async()=>{
+    try {
+      const response=await axios.post('http://localhost:8000/register',userData)
+      .then(response=>{
+        console.log(response.data)
+        const token=response.data.token
+        AsyncStorage.setItem("token",token)
+      })
+      clearAllScreenData()
+    } catch (error) {
+      console.log("error at registerUser",error)
+    }
+  }
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
       <View style={{marginTop: 80}}>   
