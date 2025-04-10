@@ -34,7 +34,7 @@ const RegisterScreen = () => {
 
           <Pressable style={{padding:15, borderRadius: 8,backgroundColor:email?.length>4? '#2dcf30':'#E0E0E0'}}
           onPress={next} disabled={!checked}>
-            <Text style={{textAlign: 'center'}}>Next</Text>
+            <Text style={{textAlign: 'center',fontSize: 17, fontWeight: '400'}}>Next</Text>
           </Pressable>
         </View>
         <View style={{flexDirection:'row',justifyContent: 'center', alignItems: 'center'}}>

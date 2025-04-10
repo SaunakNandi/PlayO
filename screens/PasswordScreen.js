@@ -29,14 +29,15 @@ const PasswordScreen = () => {
         </View>
         <Text style={{fontSize: 25,fontWeight: 'bold',fontFamily: 'GeezaPro-Bold',
           marginTop: 15}}>Please choose a password</Text>
-          <TextInput  placeholder='Enter your password' secureTextEntry={true} autoFocus={true}
-          onChangeText={text=>setPassword(text)}
-          style={{width: 340,marginVertical: 10,marginTop: 25,borderBottomColor: 'black',borderBottomWidth: 1,paddingBottom: 10,fontFamily: 'GeezaPro-Bold',fontSize: 22}}/>
-          <Text style={{color: 'gray', fontSize: 15, marginTop: 7}}>Note: You details will be safe with us</Text>
-          <TouchableOpacity activeOpacity={0.8} onPress={handleNext} style={{marginTop:30,marginLeft:"auto"}}>
-            <MaterialCommunityIcons color='green' size={45} name='arrow-right-circle'
-            style={{alignSelf:"center",marginTop:20}}/>
-          </TouchableOpacity>
+        <TextInput  placeholder='Enter your password' secureTextEntry={true} autoFocus={true}
+        onChangeText={text=>setPassword(text)}
+        style={{width: 340,marginVertical: 10,marginTop: 25,borderBottomColor: 'black',borderBottomWidth: 1,paddingBottom: 10,fontFamily: 'GeezaPro-Bold',fontSize: 22}}/>
+        <Text style={{color: 'gray', fontSize: 15, marginTop: 7}}>Note: You details will be safe with us</Text>
+        <TouchableOpacity activeOpacity={0.8} onPress={handleNext} style={{marginTop:30,marginLeft:"auto"}}
+        disabled={!password}>
+          <MaterialCommunityIcons color='green' size={45} name='arrow-right-circle'
+          style={{alignSelf:"center",marginTop:20}}/>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   )

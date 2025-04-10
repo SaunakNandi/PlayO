@@ -97,58 +97,57 @@ const StartScreen = () => {
     <>
       <SafeAreaView >
         {/* Need to check the marker image and text */}
-      <MapView ref={mapView} style={{width:'100%',height:400}}
-      initialRegion={{
-        latitude: 37.78825,
-        longitude: -122.4324,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      }}>
-        {
-          circularPoints?.map((point,index)=>{
-            const user=users[index%users.length] // cycle thorugh users if more points than the user
-            console.log('user',user)
-            return (
-              <Marker key={index} coordinate={point}>
-                <View style={{ alignItems: 'center' }}>
-                  {/* User Image */}
-                  <Image
-                    source={{ uri: user?.image }}
-                    style={{ width: 60, height: 50, resizeMode: 'cover', borderRadius: 5 }}
-                  />
+        <MapView ref={mapView} style={{width:'100%',height:400}}
+        initialRegion={{
+          latitude: 37.78825,
+          longitude: -122.4324,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}>
+          {
+            circularPoints?.map((point,index)=>{
+              const user=users[index%users.length] // cycle thorugh users if more points than the user
+              console.log('user',user)
+              return (
+                <Marker key={index} coordinate={point}>
+                  <View style={{ alignItems: 'center' }}>
+                    {/* User Image */}
+                    <Image
+                      source={{ uri: user?.image }}
+                      style={{ width: 60, height: 50, resizeMode: 'cover', borderRadius: 5 }}
+                    />
 
-                  {/* Description Text */}
-                  <View
-                    style={{
-                      paddingHorizontal: 1,
-                      paddingVertical: 7,
-                      borderRadius: 7,
-                      backgroundColor: 'green',
-                      marginTop: 5, // Add margin to separate from image
-                      width: 60,
-                    }}
-                  >
-                    <Text style={{ textAlign: 'center', fontSize: 13, fontWeight: '500', color: 'white' }}>
-                      {user?.description}
-                    </Text>
+                    {/* Description Text */}
+                    <View
+                      style={{
+                        paddingHorizontal: 1,
+                        paddingVertical: 7,
+                        borderRadius: 7,
+                        backgroundColor: 'green',
+                        marginTop: 5, // Add margin to separate from image
+                        width: 60,
+                      }}>
+                      <Text style={{ textAlign: 'center', fontSize: 13, fontWeight: '500', color: 'white' }}>
+                        {user?.description}
+                      </Text>
+                    </View>
                   </View>
-                </View>
-              </Marker>
-            )
-          })
-        }
-      </MapView>
-      <View style={{marginTop:35,justifyContent:'center',alignItems:'center'}}>
-        <Text style={{fontSize: 20,fontWeight: '500',width: '50%',textAlign: 'center'}}>Find Player in your neighbourhood</Text>
-        <Text style={{marginTop: 20, color: 'gray', fontSize: 15}}>Just like you did as kid!</Text>
-      </View>
-      <Pressable style={{marginTop: 40,justifyContent: 'center',alignItems: 'center',}}>
-        <Text style={{color:"gray",fontSize:16}}>Already have an account Login</Text>
-      </Pressable>
-      <View style={{justifyContent: 'center', alignItems: 'center',marginTop:25}}>
-        <Image style={{width:110,height:60,resizeMode:'contain'}}
-        source={{uri: 'https://playo-website.gumlet.io/playo-website-v2/logos-icons/new-logo-playo.png?q=50'}}/>
-      </View>
+                </Marker>
+              )
+            })
+          }
+        </MapView>
+        <View style={{marginTop:35,justifyContent:'center',alignItems:'center'}}>
+          <Text style={{fontSize: 20,fontWeight: '500',width: '50%',textAlign: 'center'}}>Find Player in your neighbourhood</Text>
+          <Text style={{marginTop: 20, color: 'gray', fontSize: 15}}>Just like you did as kid!</Text>
+        </View>
+        <Pressable style={{marginTop: 40,justifyContent: 'center',alignItems: 'center',}}>
+          <Text style={{color:"gray",fontSize:16}}>Already have an account Login</Text>
+        </Pressable>
+        <View style={{justifyContent: 'center', alignItems: 'center',marginTop:25}}>
+          <Image style={{width:110,height:60,resizeMode:'contain'}}
+          source={{uri: 'https://playo-website.gumlet.io/playo-website-v2/logos-icons/new-logo-playo.png?q=50'}}/>
+        </View>
       </SafeAreaView>
 
       <View style={{padding:10,backgroundColor:'white',marginTop:'30'}}>
