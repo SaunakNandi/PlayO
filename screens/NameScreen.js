@@ -26,25 +26,25 @@ const NameScreen = () => {
   return (
     <>
       <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
-      <View style={{marginHorizontal: 10}}>
-        <Ionicons name='arrow-back' size={24} color='black'/>
-      </View>
-      <View style={{marginHorizontal: 10, marginVertical: 15}}>
-        <Text style={{fontSize: 20, fontWeight: 'bold'}}>Complete your profile</Text>
-        <Text style={{marginTop: 10, color: 'gray'}}>What you will like you mates to call you?</Text>
-      </View>
-      <View style={{backgroundColor: 'white',marginHorizontal: 10,marginVertical: 25,flexDirection: 'column',gap: 20}}>
-        <View>
-          <Text style={{fontSize: 16, color: 'gray'}}>First Name*</Text>
-          <TextInput value={firstName} onChangeText={setFirstName} 
-          style={{padding:10,borderColor:'#D0D0D0',borderWidth: 1,borderRadius: 10,marginTop: 10}}/>
+        <View style={{marginHorizontal: 10}}>
+          <Ionicons name='arrow-back' size={24} color='black' onPress={()=>navigation.goBack()}/>
         </View>
-        <View>
-          <Text style={{fontSize: 16, color: 'gray'}}>Last Name*</Text>
-          <TextInput value={lastName} onChangeText={setLastName} 
-          style={{padding:10,borderColor:'#D0D0D0',borderWidth: 1,borderRadius: 10,marginTop: 10}}/>
+        <View style={{marginHorizontal: 10, marginVertical: 15}}>
+          <Text style={{fontSize: 20, fontWeight: 'bold'}}>Complete your profile</Text>
+          <Text style={{marginTop: 10, color: 'gray'}}>What you will like you mates to call you?</Text>
         </View>
-      </View>
+        <View style={{backgroundColor: 'white',marginHorizontal: 10,marginVertical: 25,flexDirection: 'column',gap: 20}}>
+          <View>
+            <Text style={{fontSize: 16, color: 'gray'}}>First Name*</Text>
+            <TextInput value={firstName} onChangeText={setFirstName} 
+            style={{padding:10,borderColor:'#D0D0D0',borderWidth: 1,borderRadius: 10,marginTop: 10}}/>
+          </View>
+          <View>
+            <Text style={{fontSize: 16, color: 'gray'}}>Last Name*</Text>
+            <TextInput value={lastName} onChangeText={setLastName} 
+            style={{padding:10,borderColor:'#D0D0D0',borderWidth: 1,borderRadius: 10,marginTop: 10}}/>
+          </View>
+        </View>
       </SafeAreaView>
       <Pressable  style={{backgroundColor: '#07bc0c',marginTop: 'auto',marginBottom: 30,padding: 12,marginHorizontal: 10,borderRadius: 4}}
       onPress={saveName}>
