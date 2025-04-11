@@ -6,13 +6,54 @@ const jwt=require('jsonwebtoken')
 const app=express()
 const port=8000
 const cors=require('cors')
+const crypto=require('crypto')
 app.use(cors())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
-mongoose.connect('mongodb+srv://saunak:saunak@cluster0.uzoamlw.mongodb.net/').then(()=>{
+
+const User=require('./models/User.models.js')
+const Game=require('./models/Game.models.js')
+const Venue=require('./models/Venue.models.js')
+mongoose.connect('mongodb+srv://saunak:saunak@cluster0.uzoamlw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0').then(()=>{
     console.log('Connected to MongoDB')
 }).catch(err => console.log("Error connecting to MongoDB"))
 
 app.listen(port,()=>{
     console.log(`Server is running on port ${port}`)
+})
+
+app.post('/register',async(req,res)=>{
+    console.log('called')
+    try {
+        const userData=req.body
+        const newUser=new User(userData)  // creating new user
+        await newUser.save()
+        console.log(newUser)
+        const secretKey=crypto.randomBytes(32).toString("hex")
+        const token=jwt.sign({userId:newUser._id},secretKey)
+        res.status(200).json({token})
+    } catch (error) {
+        console.log(`Error registering`,error)
+        res.status(500).json({error:"Registration Error"})
+    }
+})
+
+app.post('/login',async(req,res)=>{
+    try {
+        const {email,password}=req.body
+        const user=await User.findOne({email})
+        console.log("login ",user)
+        if(!user)
+            return res.status(401).json({message:'User Not found'})
+        if(user.email!==email)
+            return res.status(401).json({message:'Invalid emilID'})
+        if(user.password!==password)
+            return res.status(401).json({message:'Invalid Password'})
+        const secretKey=crypto.randomBytes(32).toString('hex')
+        const token=jwt.sign({userId:user._id},secretKey)
+        res.status(200).json({token})
+    } catch (error) {
+        console.log(`Error registering`,error)
+        res.status(500).json({error:"Login Error"})
+    }
 })
