@@ -3,11 +3,12 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useState } from 'react'
+import { useNavigation } from '@react-navigation/native'
 
 const PlayScreen = () => {
   const [option,setOption]=useState('My Sports')
   const [sport,setSport]=useState('Badminton')
-
+  const navigation=useNavigation()
   return (
     <SafeAreaView>
       <View style={{padding:12,backgroundColor:'#223536'}}>
@@ -76,8 +77,8 @@ const PlayScreen = () => {
           padding: 12,
           backgroundColor: 'white',
         }}>
-        <Pressable>
-          <Text>Create Game</Text>
+        <Pressable onPress={()=>navigation.navigate("Create")}>
+          <Text style={{fontWeight: 'bold'}}>Create Game</Text>
         </Pressable>
         <View style={{flexDirection: 'row', alignItems: 'center', gap: 15}}>
           <Pressable>

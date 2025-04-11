@@ -20,6 +20,7 @@ import OtpScreen from '../screens/OtpScreen'
 import LoginScreen from '../screens/LoginScreen'
 import RegisterScreen from '../screens/RegisterScreen'
 import { AuthContext } from '../AuthContext'
+import CreateActivityScreen from '../screens/CreateActivityScreen'
 const StackNavigator = () => {
     const {token}=useContext(AuthContext)
     const Stack=createNativeStackNavigator()
@@ -85,6 +86,7 @@ const StackNavigator = () => {
             <Stack.Navigator>
                 <Stack.Screen name='Main' component={BottomTabs} options={{headerShown:false}}/>
                 <Stack.Screen name='Venue' component={VenueInfoScreen} options={{headerShown:false}}/>
+                <Stack.Screen name='Create' component={CreateActivityScreen} options={{headerShown:false}}/>
             </Stack.Navigator>
         )
     }
