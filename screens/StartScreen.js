@@ -107,7 +107,6 @@ const StartScreen = () => {
           {
             circularPoints?.map((point,index)=>{
               const user=users[index%users.length] // cycle thorugh users if more points than the user
-              console.log('user',user)
               return (
                 <Marker key={index} coordinate={point}>
                   <View style={{ alignItems: 'center' }}>

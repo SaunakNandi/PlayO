@@ -203,6 +203,7 @@ const BookScreen = () => {
           <Text>Nawabganj</Text>
           <MaterialIcons name='keyboard-arrow-down' size={24} color='black'/>
         </View>
+        {/* Common code */}
         <View style={{flexDirection: 'row', alignItems: 'center', gap: 10}}  >
           <Icon name='chatbox-outline' size={24} color='green'/>
           <Icon name='notifications-outline' size={24} color='green'/>

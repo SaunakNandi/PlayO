@@ -1,0 +1,74 @@
+🔁 navigate.navigate("Main")
+What it does:
+
+Pushes a new screen on top of the current stack.
+You can go back to the previous screen using goBack().
+
+navigate.navigate("Main")
+
+You’re on the Register screen → You navigate to Main → You can still press the back button to return to Register.
+
+🔀 navigate.replace("Main")
+What it does:
+
+Replaces the current screen with the new one.
+
+You cannot go back to the previous screen.
+
+It completely removes the current screen from the navigation history.
+
+navigate.replace("Main")
+
+You’re on Register → Replace with Main → Pressing back won’t take you back to Register.
+
+Perfect for flows like:
+
+Login/Register → Home screen
+
+Splash screen → Main app
+
+Onboarding → App
+
+🤓 Special case: replace('MainStack', { screen: 'Main' })
+Usefull if you're using nested navigators (e.g., a MainStack with multiple screens), then:
+
+Replace current screen with the navigator MainStack
+
+And inside it, open the Main screen
+
+
+
+Why http://localhost:8000/register will not work in android
+In React Native (Android), localhost or 127.0.0.1 refers to the Android emulator itself, not your computer running the server. So it can't find your backend and throws a network error.
+
+ ✅ Solution
+ Use 10.0.2.2 instead of localhost. This is a special alias that Android emulators use to access the host machine.
+
+
+
+
+✅ When to use FlatList over .map()
+Use FlatList when:
+
+You’re rendering a list of items (even a dozen or more).
+
+You want built-in performance optimizations.
+
+You care about scrolling, spacing, or pagination.
+
+You need features like pull-to-refresh, loading more on scroll, etc.
+
+🧠 Why FlatList + SafeAreaView is a good combo:
+SafeAreaView ensures your content respects notches, status bars, and rounded corners on modern phones — especially on iPhones or Pixel devices.
+FlatList works great inside SafeAreaView because it:
+
+Adapts to the screen space correctly.
+
+Scrolls smoothly without rendering every item at once.
+
+Helps avoid lag on longer lists.
+
+🚫 When .map() inside a ScrollView is okay:
+When you’re rendering a small, fixed number of items (like 2–3).
+
+If you need complete control and know performance won’t suffer.
