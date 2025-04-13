@@ -21,6 +21,8 @@ import LoginScreen from '../screens/LoginScreen'
 import RegisterScreen from '../screens/RegisterScreen'
 import { AuthContext } from '../AuthContext'
 import CreateActivityScreen from '../screens/CreateActivityScreen'
+import TagVenueScreen from '../screens/TagVenueScreen'
+import SelectTimeScreen from '../screens/SelectTimeScreen'
 const StackNavigator = () => {
     const {token}=useContext(AuthContext)
     const Stack=createNativeStackNavigator()
@@ -87,6 +89,8 @@ const StackNavigator = () => {
                 <Stack.Screen name='Main' component={BottomTabs} options={{headerShown:false}}/>
                 <Stack.Screen name='Venue' component={VenueInfoScreen} options={{headerShown:false}}/>
                 <Stack.Screen name='Create' component={CreateActivityScreen} options={{headerShown:false}}/>
+                <Stack.Screen name='TagVenue' component={TagVenueScreen} options={{headerShown:false}}/>
+                <Stack.Screen name='Time' component={SelectTimeScreen} options={{headerShown:false}}/>
             </Stack.Navigator>
         )
     }
