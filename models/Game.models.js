@@ -10,7 +10,7 @@ const gameSchema=new Schema({
         type:String,
         required:true
     },
-    data:{
+    date:{
         type:String,
         required:true
     },
@@ -31,7 +31,7 @@ const gameSchema=new Schema({
     },
     admin:{
         type:mongoose.Schema.Types.ObjectId,
-        ewf:'User',
+        ref:'User',
         required:true
     },
     players:[{
@@ -60,9 +60,9 @@ const gameSchema=new Schema({
         type:Boolean,
         default:false
     },
-    courNumer:[
-
-    ]
+    courtNumber:{
+        type:String,
+    }
 })
 
 module.exports=mongoose.model("Game",gameSchema)

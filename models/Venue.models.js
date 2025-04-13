@@ -27,7 +27,9 @@ const venueSchema=new Schema({
             number:Number
         }]
     }],
-    location:Boolean,
+    location:{
+        type:String
+    },
     address:{
         type:String,
         required:true

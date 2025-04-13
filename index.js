@@ -14,6 +14,8 @@ app.use(bodyParser.json())
 const User=require('./models/User.models.js')
 const Game=require('./models/Game.models.js')
 const Venue=require('./models/Venue.models.js')
+const {venues} = require('./constants.js')
+
 mongoose.connect('mongodb+srv://saunak:saunak@cluster0.uzoamlw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0').then(()=>{
     console.log('Connected to MongoDB')
 }).catch(err => console.log("Error connecting to MongoDB"))
@@ -56,4 +58,55 @@ app.post('/login',async(req,res)=>{
         console.log(`Error registering`,error)
         res.status(500).json({error:"Login Error"})
     }
+})
+
+async function addVenues(){
+    for(const venueData of venues)
+    {
+        const existingVenue=await Venue.findOne({name:venueData?.name})
+        if(existingVenue)
+        {
+            console.log("Venue ${venueData.name} already exists. Skipping")
+        }
+        else{
+            const newVenue=new Venue(venueData)
+            await newVenue.save()
+            console.log("Venue ${venueData.name} added successfully")
+        }
+    }
+}
+
+addVenues().catch(err=>{
+    console.log('Error adding venues',err)
+})
+
+app.get('/venues',async(req,res)=>{
+    try {
+        const venues=await Venue.find({})
+        res.status(200).json(venues)
+    } catch (error) {
+        console.log("Venue error",error)
+        res.status(500).json({message:"Failed to fetch venues"})
+    }
+})
+
+app.post('/creategame',async(req,res)=>{
+  try {
+    const {sport,area,date,time,admin,totalPlayers}=req.body
+    const activityAccess="Public"
+    const newGame = new Game({
+        sport,
+        area,
+        date,
+        time,
+        admin,
+        totalPlayers,
+        players: [admin],
+      });
+    const savedGame=await newGame.save()
+    res.status(200).json(savedGame)
+  } catch (error) {
+    console.log("Error",error)
+    res.status(500).json({message:"Failed to create a game"})
+  }
 })
