@@ -1,11 +1,12 @@
 import { Text, ScrollView, View, Image, Pressable, ImageBackground } from 'react-native'
-import React, { useLayoutEffect } from 'react'
+import React, { useLayoutEffect,useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 
 const HomeScreen = () => {
   const navigation=useNavigation()
+  console.log(navigation)
   useLayoutEffect(()=>{
     navigation.setOptions({
       headerTitle:"",
