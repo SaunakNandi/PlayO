@@ -56,11 +56,24 @@ const SelectTimeScreen = () => {
     const hideEndTimePicker=()=>{
         setIsEndTimePickerVisible(false)
     }
+    const formatTime = (time) => {
+        if (!time) return 'Select Time';
+        const hours = time.getHours();
+        const minutes = time.getMinutes();
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        const formattedHours = hours % 12 || 12;
+        const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+        return `${formattedHours}:${formattedMinutes} ${ampm}`;
+    };
     const handleConfirmEndTime=(time)=>{
       // We are returning to previous page so no need of this operation
         // setEndTime(time)
         // hideEndTimePicker()
 
+        // console.log(time.getHours()+" "+time.getMinutes() ,startTime.getHours()+" "+time.getMinutes())
+        // if(time.getHours()<startTime.getHours()) return
+        // else if(time.getHours()==startTime.getHours() && time.getMinutes<=startTime.getMinutes()) return
+        
         // Navigate back to CreateActivityScreen
         if(startTime)
         {
@@ -81,15 +94,6 @@ const SelectTimeScreen = () => {
             }
         })
     })
-    const formatTime = time => {
-        if (!time) return 'Select Time';
-        const hours = time.getHours();
-        const minutes = time.getMinutes();
-        const ampm = hours >= 12 ? 'PM' : 'AM';
-        const formattedHours = hours % 12 || 12;
-        const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-        return `${formattedHours}:${formattedMinutes} ${ampm}`;
-    };
       
   return (
     <View>

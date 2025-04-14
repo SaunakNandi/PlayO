@@ -1,14 +1,47 @@
-import { StyleSheet, Text, View, Image, Pressable, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, Image, Pressable, ScrollView, FlatList } from 'react-native'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
+import axios from 'axios'
+import Game from '../components/Game'
+import { AuthContext } from '../AuthContext'
+import UpComingGames from './UpComingGames'
 
 const PlayScreen = () => {
   const [option,setOption]=useState('My Sports')
   const [sport,setSport]=useState('Badminton')
+  const [games,setGames]=useState([])
+  const [upcomingGames,setUpComingGames]=useState()
+  const {userId}=useContext(AuthContext)
   const navigation=useNavigation()
+  const fetchGames=async()=>{
+    try {
+      const response=await axios.get('http://10.0.2.2:8000/games')
+      setGames(response.data)
+    } catch (error) {
+      console.log('Error',error)
+    }
+  }
+  const fetchUpcomingGames=async()=>{
+    try {
+      console.log(userId)
+      const response=await axios.get(`http://10.0.2.2:8000/upcoming?userId=${userId}`)
+      setUpComingGames(response.data)
+    } catch (error) {
+      console.log('Error',error)
+    }
+  }
+  useEffect(()=>{
+    fetchGames()
+  },[])
+  useEffect(()=>{
+    if(userId)
+      fetchUpcomingGames()
+  },[userId])
+  // console.log("games ",games)
+  // console.log("upcoming games ",upcomingGames)
   return (
     <SafeAreaView>
       <View style={{padding:12,backgroundColor:'#223536'}}>
@@ -89,6 +122,28 @@ const PlayScreen = () => {
           </Pressable>
         </View>
       </View>
+      {
+        option=="My Sports" && (
+          <FlatList
+          renderItem={({item}) => <Game item={item} />}
+          data={games}
+          contentContainerStyle={{ paddingBottom: 200 }}
+          keyExtractor={item => item._id}
+          showsVerticalScrollIndicator={false}
+        />
+        )
+      }
+      {
+        option=="Calendar" && (
+          <FlatList
+          renderItem={({item}) => <UpComingGames item={item} />}
+          data={upcomingGames}
+          contentContainerStyle={{ paddingBottom: 200 }}
+          keyExtractor={item => item._id}
+          showsVerticalScrollIndicator={false}
+        />
+        )
+      }
     </SafeAreaView>
   )
 }

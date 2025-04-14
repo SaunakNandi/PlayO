@@ -20,11 +20,11 @@ const CreateActivityScreen = () => {
     const [modalVisible,setModalVisible]=useState(false)
     const navigation=useNavigation()
     const {userId}=useContext(AuthContext)
-    const {sport,area,date,timeInterval,taggedVenue,setSport,setArea,setDate,noOfPlayers,setnoOfPlayers}=useContext(DataContext)
-    console.log(timeInterval,taggedVenue)
+    const {sport,area,date,timeInterval,taggedVenue,setTimeInterval,setSport,setArea,setDate,noOfPlayers,setnoOfPlayers}=useContext(DataContext) // context API
+    // Viewconsole.log(timeInterval,taggedVenue)
     const generateDates=()=>{
         const dates=[]
-        for(let i=0;i<10;i++)
+        for(let i=0;i<9;i++)
         {
             const date=moment().add(i,"days")
             let displayDate
@@ -73,14 +73,20 @@ const CreateActivityScreen = () => {
             console.log(response)
             if(response.status==200)
             {
+                //  Alert message 
                 Alert.alert('Success!','Game created successfully',[
                     {
                         text:'Cancel',
                         onPress:()=>{console.log("Cancel Pressed")},
                         style:'cancel',
                     },
-                    {text:'OK',onPress:()=>navigation.navigate('Main')}
+                    {text:'OK',onPress:()=>navigation.navigate('Main',{screen:'PLAY'})}
                 ])
+                setSport("")
+                setArea("")
+                setDate("")
+                setTimeInterval("")
+                setnoOfPlayers(0)
             }
         } catch (error) {
             console.log("create  game ",error)
@@ -90,12 +96,11 @@ const CreateActivityScreen = () => {
     <>
         <SafeAreaView style={{flex:1,backgroundColor:'white'}}>
             <ScrollView>
-                <View style={{marginHorizontal: 10}}>
-                    <Ionicons name='arrow-back' size={24} color='black' onPress={()=>navigation.goBack()}/>
-                </View>
+                <Ionicons name='arrow-back' size={24} color='black' onPress={()=>navigation.goBack()}
+                        style={{marginHorizontal:10}}/>
                 <View style={{padding:10}}>
                     <Text style={{fontSize: 25, fontWeight: 'bold'}}>Create Activity</Text>
-                    <Pressable style={{flexDirection: 'row',alignItems: 'center',gap: 20,marginTop: 15,
+                    <View style={{flexDirection: 'row',alignItems: 'center',gap: 20,marginTop: 15,
                     marginVertical: 2}}>
                         <MaterialCommunityIcons color='gray' size={24} name='whistle'/>
                         <View style={{flex:1}}>
@@ -105,7 +110,7 @@ const CreateActivityScreen = () => {
                             placeholderTextColor='gray'/>
                         </View>
                         <AntDesign name='arrowright' size={24} color='gray'/>            
-                    </Pressable>
+                    </View>
                     <Text style={{borderColor: '#E0E0E0', borderWidth: 0.7, height: 1}}/>
                     <Pressable style={{flexDirection: 'row',alignItems: 'center',gap: 20,marginTop: 15,
                     marginVertical: 2}} 
@@ -122,7 +127,7 @@ const CreateActivityScreen = () => {
                     <Text style={{borderColor: '#E0E0E0', borderWidth: 0.7, height: 1}}/>
                     <Pressable style={{flexDirection: 'row',alignItems: 'center',gap: 20,marginTop: 15,
                     marginVertical: 2}}
-                    onPress={()=>setModalVisible(!modalVisible)}>
+                    onPress={()=>setModalVisible(true)}>
                         <Feather name='calendar' size={24} color='gray'/>
                         <View style={{flex:1}}>
                             <Text style={{fontSize: 17, fontWeight: '500'}}>Date</Text>
@@ -170,8 +175,7 @@ const CreateActivityScreen = () => {
                                     width: 140,
                                     justifyContent: 'center',
                                     borderRadius: 3,
-                                    padding: 10,
-                                }}>
+                                    padding: 10}}>
                                     <Ionicons name='earth' size={24} color={selected.includes('Public')?'white':'black'}/>
                                     <Text style={selected.includes('Public')?
                                         {color:'white',fontWeight:'bold',fontSize:15}:
@@ -209,11 +213,9 @@ const CreateActivityScreen = () => {
                     <Text style={{marginTop: 20, fontSize: 16}}>Total Players</Text>
                     <View style={{padding: 10,backgroundColor: '#F0F0F0',marginTop: 10,borderRadius: 6}}>
                         <View style={{marginVertical: 5}}>
-                            <View>
-                                <TextInput value={noOfPlayers} onChangeText={setnoOfPlayers}
-                                style={{padding: 10,backgroundColor: 'white',borderColor: '#D0D0D0',borderWidth: 1}}
-                                placeholder="Total Players (including you)"/>
-                            </View>
+                            <TextInput value={noOfPlayers} onChangeText={setnoOfPlayers}
+                            style={{padding: 10,backgroundColor: 'white',borderColor: '#D0D0D0',borderWidth: 1}}
+                            placeholder="Total Players (including you)"/>
                         </View>
                     </View>
                     <Text style={{borderColor: '#E0E0E0', borderWidth: 0.7, height: 1,marginTop:15}}/>
@@ -251,39 +253,31 @@ const CreateActivityScreen = () => {
         <Pressable onPress={()=>createGame()}
         style={{backgroundColor: '#07bc0c',marginTop: 'auto',marginBottom: 30,padding: 12,marginHorizontal: 10,
         borderRadius: 4}}>
-        <Text style={{textAlign: 'center',color: 'white',fontSize: 15,fontWeight: '500'}}>
-          Create Activity
-        </Text>
-      </Pressable>
+            <Text style={{textAlign: 'center',color: 'white',fontSize: 15,fontWeight: '500'}}>
+            Create Activity
+            </Text>
+        </Pressable>
         <Modal
         isVisible={modalVisible}
         onBackdropPress={() => setModalVisible(false)} // ✅ dismiss when touch outside
         onBackButtonPress={() => setModalVisible(false)} // ✅ hardware back button
+        onSwipeComplete={() => setModalVisible(false)}
         swipeDirection={['up', 'down']}
         swipeThreshold={200}
-        onSwipeComplete={() => setModalVisible(false)}
         animationIn="slideInUp"     // 💥 Slide from bottom
         animationOut="slideOutDown"
-        animationOutTiming={700}
+        animationOutTiming={900}
         style={{ justifyContent: 'flex-end', margin: 0 }}
         >
-        <View style={{ width: '100%', height: 400, backgroundColor: 'white', borderTopLeftRadius: 15, borderTopRightRadius: 15, padding: 16 }}>
+        <View style={{ width: '100%', height: 320, backgroundColor: 'white', borderTopLeftRadius: 15, borderTopRightRadius: 15, padding: 16 }}>
             <Text style={{ textAlign: 'center', fontSize: 16, fontWeight: 'bold' }}>
-            Choose date/ time to rehost
+                Choose date/ time to rehost
             </Text>
             <View style={{flexDirection: 'row',alignItems: 'center',gap: 15,flexWrap: 'wrap',marginVertical: 20,
             justifyContent: 'space-between'}}>
             {dates?.map((item, i) => (
                 <Pressable key={i}
-                style={{
-                    padding: 10,
-                    borderRadius: 10,
-                    borderColor: '#E0E0E0',
-                    borderWidth: 1,
-                    width: '30%',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                }}
+                style={{padding: 10,borderRadius: 10,borderColor: '#E0E0E0',borderWidth: 1,width: '30%',justifyContent: 'center',alignItems: 'center'}}
                 onPress={() => selectDate(item?.actualDate)}>
                     <Text>{item?.displayDate}</Text>
                     <Text style={{ color: 'gray', marginTop: 8 }}>{item?.dayOfWeek}</Text>

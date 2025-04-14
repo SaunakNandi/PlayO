@@ -31,7 +31,7 @@ const TagVenueScreen = () => {
 
   const handleSelectVenue=(venue)=>{
     setTaggedVenue(venue)
-    navigation.navigate("Create",{taggedVenue:venue})
+    navigation.navigate("Create")
   }
   return (
     <SafeAreaView>
@@ -44,7 +44,6 @@ const TagVenueScreen = () => {
       <FlatList data={venues} renderItem={({item})=>(
         <Pressable style={{padding: 10,marginVertical: 10,borderColor: '#e0e0e0',borderWidth: 1,marginHorizontal: 10}}
         onPress={()=>handleSelectVenue(item?.name)}>
-          <View>
             <View style={{flexDirection: 'row', gap: 10}}>
               <Image source={{uri:item?.image}} style={{width: 90,height: 90,resizeMode: 'cover',borderRadius: 7}}/>
               <View style={{ flex: 1, justifyContent: 'center' }}>
@@ -58,7 +57,6 @@ const TagVenueScreen = () => {
             <View>
               <Text style={{textAlign:'center',color:'gray'}}>Bookable</Text>
             </View>
-          </View>
         </Pressable>
       )}/>
     </SafeAreaView>

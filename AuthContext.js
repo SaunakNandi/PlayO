@@ -20,16 +20,14 @@ export const AuthProvider=({children})=>{
         const fetchUser=async()=>{
             const token=await AsyncStorage.getItem("token")
             const decodedToken=jwtDecode(token);
-            console.log(decodedToken)
+            // console.log(decodedToken)
             const userId=decodedToken.userId
             setUserId(userId)
         }
         fetchUser()
-    },[])
-
-    useEffect(()=>{
         isLoggedIn()
     },[])
+
     return(
         <AuthContext.Provider value={{token,setToken,userId,setUserId,upcomingGames,setUpComingGames}}>
             {children}
