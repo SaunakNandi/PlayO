@@ -15,6 +15,7 @@ const User=require('./models/User.models.js')
 const Game=require('./models/Game.models.js')
 const Venue=require('./models/Venue.models.js')
 const {venues} = require('./constants.js')
+const { request } = require('http')
 
 mongoose.connect('mongodb+srv://saunak:saunak@cluster0.uzoamlw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0').then(()=>{
     console.log('Connected to MongoDB')
@@ -109,4 +110,81 @@ app.post('/creategame',async(req,res)=>{
     console.log("Error",error)
     res.status(500).json({message:"Failed to create a game"})
   }
+})
+
+app.get('/games',async(req,res)=>{
+    try {
+        const games=await Game.find({}).populate('admin').populate('players','image firstName lastName')
+        // console.log(games.length)
+        const currentDate=moment()
+        const filteredGames=games?.filter(game=>{
+            // console.log("game ",game)
+            const gameDate=moment(game.date,"Do MMM")
+            // console.log("game time ",game.time)
+            const gameStartTime=game.time.split(" - ")[0]
+            // console.log('game time',gameTime)
+            const gameDateTime=moment(`${gameDate.format("YYYY-MM-DD")} ${gameStartTime}`,'YYYY-MM-DD h:mm A')  //2025-04-13 10:00
+            return gameDateTime.isAfter(currentDate)
+        })
+        const formattedGames=filteredGames.map(game=>(
+            {
+                _id:game._id,
+                sport:game.sport,
+                date:game.date,
+                area:game.area,
+                time:game.time,
+                players:game.players.map(player=>({
+                    _id:player._id,
+                    imageUrl:player.image,
+                    name:`${player.firstName} ${[player.lastName]}`,
+                })),
+                totalPlayers:game.totalPlayers,
+                queries:game.queries,
+                requests:game.requests,
+                isBooked:game.isBooked,
+                adminName:`${game.admin.firstName} ${game.admin.lastName}`,
+                adminUrl:game.admin.image,
+                matchFull:game.matchFull
+            }
+        ))
+        return res.json(formattedGames)
+    } catch (error) {
+        console.log("Error",error)
+    res.status(500).json({message:"Failed to fetch game"})
+    }
+})
+
+app.get('/upcoming',async(req,res)=>{
+    try {
+        const userId='67f932fa08de50415124d565'
+        //  either the user is admin or player
+        const games=await Game.find({$or:[{admin:userId},{players:userId}]})
+            .populate("admin").populate("players","image firstName lastName")
+            // console.log("games ",games)
+        const formattedGames=games.map(game=>({
+                _id:game._id,
+                sport:game.sport,
+                date:game.date,
+                area:game.area,
+                time:game.time,
+                players:game.players.map(player=>({
+                    _id:player._id,
+                    imageUrl:player.image,
+                    name:`${player.firstName} ${[player.lastName]}`,
+                })),
+                totalPlayers:game.totalPlayers,
+                queries:game.queries,
+                requests:game.requests,
+                isBooked:game.isBooked,
+                adminName:`${game.admin.firstName} ${game.admin.lastName}`,
+                adminUrl:game.admin.image,
+                matchFull:game.matchFull
+            }
+        ))
+        console.log("formattedGames ",formattedGames)
+        res.status(200).json(formattedGames)   // Wrong status code can cause unexpected problem
+    } catch (error) {
+        console.log("Error upcoming",error)
+        res.status(500).json({message:'Failed to fetch games'})
+    }
 })
