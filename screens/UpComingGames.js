@@ -3,20 +3,21 @@ import React from 'react'
 import {useNavigation} from '@react-navigation/native';
 const UpComingGames = ({item}) => {
     const navigation=useNavigation()
-  return (
-    <Pressable style={{backgroundColor: 'white',padding: 12,borderBottomColor: '#E0E0E0',borderBottomWidth: 2,marginTop: 20}} 
-    onPress={()=>navigation.navigate('Game',{item})}>
-        <Text style={{marginVertical: 7,borderBottomColor: '#E0E0E0',borderBottomWidth: 2,color: 'blue'}}>{item?.date}</Text>
-        <View style={{flexDirection: 'row',gap: 10,backgroundColor: 'white',marginTop: 12}}>
-            <View>
-                <Image style={{width: 40, height: 40, borderRadius: 20}} source={{uri:item?.adminUrl}}/>
-            </View>
-            <View style={{ flex: 1 }}>
-                <Text style={{fontSize: 15, fontWeight: '600', flexWrap: 'wrap',marginBottom: 6}}>
-                    {item?.adminName}'s {item?.sport} Match
-                </Text>
-                <Text numberOfLines={2} style={{ color: 'gray', marginBottom: 10, flexShrink: 1 }}>{item?.area}</Text>
-                <View style={{marginVertical: 10,padding: item?.isBooked ? 0 : 15,borderRadius: 8,borderColor: '#E0E0E0',borderWidth: 1,width: '100%'}}>
+    return (
+        <Pressable style={{backgroundColor: 'white',padding: 12,borderBottomColor: '#E0E0E0',borderBottomWidth: 2,
+            marginTop: 20}} onPress={()=>navigation.navigate('Game',{item})}>
+            <Text style={{marginVertical: 7,borderBottomColor: '#E0E0E0',borderBottomWidth: 2,color: 'blue'}}>
+                {item?.date}</Text>
+            <View style={{flexDirection: 'row',gap: 10,backgroundColor: 'white',marginTop: 12}}>
+                <View>
+                    <Image style={{width: 40, height: 40, borderRadius: 20}} source={{uri:item?.adminUrl}}/>
+                </View>
+                <View style={{ flex: 1 }}>
+                    <Text style={{fontSize: 15, fontWeight: '600', flexWrap: 'wrap',marginBottom: 6}}>
+                        {item?.adminName}'s {item?.sport} Match
+                    </Text>
+                    <Text numberOfLines={2} style={{ color: 'gray', marginBottom: 10, flexShrink: 1 }}>{item?.area}</Text>
+                    <View style={{marginVertical: 10,padding: item?.isBooked ? 0 : 15,borderRadius: 8,borderColor: '#E0E0E0',borderWidth: 1,width: '100%'}}>
                     {
                         item?.isBooked ? (
                         <>
@@ -35,19 +36,19 @@ const UpComingGames = ({item}) => {
                             {item?.time}
                         </Text>
                     )}
+                    </View>
                 </View>
+                    <View style={{alignItems: 'center',justifyContent: 'center',marginLeft: 10}}>
+                        <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
+                            {item?.players?.length>0 ? item?.players?.length:`No one`}
+                        </Text>
+                        <Text style={{ fontSize: 16, fontWeight: '600', marginTop: 10 }}>
+                            Joined
+                        </Text>
+                    </View>
             </View>
-                <View style={{alignItems: 'center',justifyContent: 'center',marginLeft: 10}}>
-                    <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
-                        {item?.players?.length}
-                    </Text>
-                    <Text style={{ fontSize: 16, fontWeight: '600', marginTop: 10 }}>
-                        Joined
-                    </Text>
-                </View>
-        </View>
-    </Pressable>
-  )
+        </Pressable>
+    )
 }
 
 export default UpComingGames

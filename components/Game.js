@@ -2,9 +2,13 @@ import { Image, Pressable, StyleSheet, Text, View } from 'react-native'
 import Feather from 'react-native-vector-icons/Feather';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import {useNavigation} from '@react-navigation/native';
+import { useContext } from 'react';
+import { AuthContext } from '../AuthContext';
 const Game = ({item}) => {
     const navigation=useNavigation()
     console.log("item",item)
+    const{userId}=useContext(AuthContext)
+    const userInRequests=item?.requests.some(request=>request.userId==userId)
   return (
     <Pressable style={{marginVertical: 10,marginHorizontal: 14,padding: 14,backgroundColor: 'white',borderRadius: 10}}
         onPress={()=>navigation.navigate('Game',{item})}>
@@ -36,16 +40,16 @@ const Game = ({item}) => {
                     <Text style={{marginTop: 10, color: 'gray', fontSize: 15}}>{item?.adminName} | 321 Karma | On Fire</Text>
                     <Text style={{marginTop: 10, fontSize: 14, fontWeight: '500'}}>{item?.date}, {item?.time}</Text>
                 </View>
+                {
+                    item?.matchFull && (
+                        <Image style={{width: 100, height: 70, resizeMode: 'contain'}}
+                        source={{uri: 'https://playo.co/_next/image?url=https%3A%2F%2Fplayo-website.gumlet.io%2Fplayo-website-v3%2Fmatch_full.png&w=256&q=75',
+                        }}/>
+                    )
+                }
             </View>
-            {
-                item?.matchFull && (
-                    <Image style={{width: 100, height: 70, resizeMode: 'contain'}}
-                    source={{uri: 'https://playo.co/_next/image?url=https%3A%2F%2Fplayo-website.gumlet.io%2Fplayo-website-v3%2Fmatch_full.png&w=256&q=75',
-                    }}/>
-                )
-            }
           </View>
-          <View style={{marginTop: 10,flexDirection: 'row',alignItems: 'center',gap: 7,}}>
+          <View style={{marginTop: 5,flexDirection: 'row',alignItems: 'center',gap: 7,}}>
             <SimpleLineIcons name="location-pin" size={20} color="black" />
             <Text style={{fontSize: 15, flex: 1}} numberOfLines={1} ellipsizeMode="tail">{item?.area}</Text>
           </View>
@@ -56,6 +60,17 @@ const Game = ({item}) => {
                 Intermediate to Advanced
                 </Text>
             </View>
+            {
+                userInRequests && (
+                    <View style={{backgroundColor: '#4ba143',paddingHorizontal: 10,paddingVertical: 4,borderRadius: 5,marginTop: 10}}>
+                        <View>
+                            <Text style={{textAlign: 'center', color: 'white'}}>
+                                Requested
+                            </Text>
+                        </View>
+                    </View>
+                )
+            }
           </View>
     </Pressable>
   )
