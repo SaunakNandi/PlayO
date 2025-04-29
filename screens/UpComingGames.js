@@ -4,8 +4,8 @@ import {useNavigation} from '@react-navigation/native';
 const UpComingGames = ({item}) => {
     const navigation=useNavigation()
     return (
-        <Pressable style={{backgroundColor: 'white',padding: 12,borderBottomColor: '#E0E0E0',borderBottomWidth: 2,
-            marginTop: 20}} onPress={()=>navigation.navigate('Game',{item})}>
+        <Pressable style={{backgroundColor: 'white',padding: 12,borderBottomColor: '#E0E0E0',borderBottomWidth: 2,marginTop: 20}} 
+        onPress={()=>navigation.navigate('Game',{item})}>
             <Text style={{marginVertical: 7,borderBottomColor: '#E0E0E0',borderBottomWidth: 2,color: 'blue'}}>
                 {item?.date}</Text>
             <View style={{flexDirection: 'row',gap: 10,backgroundColor: 'white',marginTop: 12}}>

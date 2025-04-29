@@ -2,20 +2,24 @@ import { StyleSheet, Text, View, Image, Pressable, ScrollView, FlatList } from '
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useContext, useEffect, useState } from 'react'
-import { useNavigation } from '@react-navigation/native'
+import { useCallback, useContext, useEffect, useState } from 'react'
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native'
 import axios from 'axios'
 import Game from '../components/Game'
 import { AuthContext } from '../AuthContext'
 import UpComingGames from './UpComingGames'
 
 const PlayScreen = () => {
-  const [option,setOption]=useState('My Sports')
+  const route=useRoute()
   const [sport,setSport]=useState('Badminton')
   const [games,setGames]=useState([])
   const [upcomingGames,setUpComingGames]=useState()
   const {userId}=useContext(AuthContext)
   const navigation=useNavigation()
+  const initialOption=route?.params?.initialOption || "My Sports"
+  const [option,setOption]=useState(initialOption)
+
+  
   const fetchGames=async()=>{
     try {
       const response=await axios.get('http://10.0.2.2:8000/games')
@@ -37,11 +41,23 @@ const PlayScreen = () => {
     fetchGames()
   },[])
   useEffect(()=>{
+    if(initialOption)
+      setOption(initialOption)
+  },[initialOption])
+  useEffect(()=>{
     if(userId)
       fetchUpcomingGames()
   },[userId])
   // console.log("games ",games)
   // console.log("upcoming games ",upcomingGames)
+
+  //called on focus
+  useFocusEffect(
+    useCallback(()=>{
+      if(userId)
+        fetchGames()
+    },[userId])
+  )
   return (
     <SafeAreaView>
       <View style={{padding:12,backgroundColor:'#223536'}}>
