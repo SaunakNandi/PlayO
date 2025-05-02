@@ -6,9 +6,9 @@ import axios from 'axios'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { DataContext } from '../DataContext'
 const TagVenueScreen = () => {
-  const [venues,setVenues]=useState([])
   const navigation=useNavigation()
   const {setTaggedVenue}=useContext(DataContext)
+  const [venues,setVenues]=useState([])
   const fetchVenues=async()=>{
     try {
       const response=await axios.get('http://10.0.2.2:8000/venues')
@@ -20,14 +20,6 @@ const TagVenueScreen = () => {
   useEffect(()=>{
     fetchVenues()
   },[])
-  // console.log("V ",venues)
-  // const [taggedVenue,setTaggedVenue]=useState(null)
-  // useEffect(()=>{
-  //   if(taggedVenue)
-  //   {
-  //     navigation.goBack({taggedVenue})
-  //   }
-  // },[taggedVenue,navigation])
 
   const handleSelectVenue=(venue)=>{
     setTaggedVenue(venue)

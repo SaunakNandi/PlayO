@@ -303,22 +303,22 @@ const GameSetUpScreens = () => {
                 </Pressable>
 
             ):(
-                          <View
-                              style={{marginTop: 'auto',flexDirection: 'row',alignItems: 'center',paddingVertical: 12,backgroundColor: '#E8E8E8'}}>
-                              <Pressable style={{backgroundColor: 'white',marginTop: 'auto',marginBottom: 30,padding: 15,marginHorizontal: 10,borderRadius: 4,flex: 1,
-                                  }}>
-                                  <Text style={{textAlign: 'center',fontSize: 15,fontWeight: '500'}}>
-                                      SEND QUERY
-                                  </Text>
-                              </Pressable>
-                              <Pressable
-                                  onPress={() => setModalVisible(!modalVisible)}
-                                  style={{backgroundColor: '#07bc0c',marginTop: 'auto',marginBottom: 30,padding: 15,marginHorizontal: 10,borderRadius: 4,flex: 1}}>
-                                  <Text style={{textAlign: 'center',color: 'white',fontSize: 15,fontWeight: '500'}}>
-                                      JOIN GAME
-                                  </Text>
-                              </Pressable>
-                          </View>
+                <View
+                    style={{marginTop: 'auto',flexDirection: 'row',alignItems: 'center',paddingVertical: 12,backgroundColor: '#E8E8E8'}}>
+                    <Pressable style={{backgroundColor: 'white',marginTop: 'auto',marginBottom: 30,padding: 15,marginHorizontal: 10,borderRadius: 4,flex: 1,
+                        }}>
+                        <Text style={{textAlign: 'center',fontSize: 15,fontWeight: '500'}}>
+                            SEND QUERY
+                        </Text>
+                    </Pressable>
+                    <Pressable
+                        onPress={() => setModalVisible(!modalVisible)}
+                        style={{backgroundColor: '#07bc0c',marginTop: 'auto',marginBottom: 30,padding: 15,marginHorizontal: 10,borderRadius: 4,flex: 1}}>
+                        <Text style={{textAlign: 'center',color: 'white',fontSize: 15,fontWeight: '500'}}>
+                            JOIN GAME
+                        </Text>
+                    </Pressable>
+                </View>
                 
             )
         }
