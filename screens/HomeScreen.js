@@ -1,12 +1,17 @@
 import { Text, ScrollView, View, Image, Pressable, ImageBackground } from 'react-native'
-import React, { useLayoutEffect,useEffect } from 'react'
+import React, { useLayoutEffect,useEffect, useContext, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import AntDesign from 'react-native-vector-icons/AntDesign'
-
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { AuthContext } from '../AuthContext'
+import axios from 'axios'
 const HomeScreen = () => {
   const navigation=useNavigation()
-  console.log(navigation)
+  const [user,setUser]=useState()
+  const {userId,setToken,setUserId}=useContext(AuthContext)
+  console.log(userId)
+  console.log(user)
   useLayoutEffect(()=>{
     navigation.setOptions({
       headerTitle:"",
@@ -22,15 +27,16 @@ const HomeScreen = () => {
           <View style={{flexDirection:"row",alignItems:'center',gap:10,marginRight:15}}>
             <Icon name='chatbox-outline' size={24} color='green'/>
             <Icon name='notifications-outline' size={24} color='green'/>
-            <Pressable>
-              <Image source={{uri:'https://yt3.ggpht.com/yti/ANjgQV_IuzfYRTz8J1diWnjpzJotstJ2_SEDFWJi-I6Wf3uK6dk=s88-c-k-c0x00ffffff-no-rj'}}
+            <Pressable onPress={clearAuthToken}>
+                {console.log("Image ",user?.image)}
+              <Image source={{uri:user?.user?.image}}
               style={{width:30,height:30,borderRadius:15}}/>
             </Pressable>
           </View>
         )
       }
     })
-  },[])
+  },[user])
   const data = [
     {
       id: '10',
@@ -61,6 +67,34 @@ const HomeScreen = () => {
       description: 'Show more',
     },
   ];
+
+  const clearAuthToken=async()=>{
+    try{
+      await AsyncStorage.removeItem("token")
+      setToken("")
+      setUserId("")
+      navigation.replace("Start")
+    }
+    catch(error){
+      console.log("Error",error)
+    }
+  }
+
+  async function fetchUser()
+  {
+    try {
+      const response=await axios.get(`http://10.0.2.2:8000/user/${userId}`)
+      console.log(response)
+      setUser(response.data)
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  }
+  useEffect(() => {
+    if(userId)
+      fetchUser()
+  }, [userId])
+
   return (
     <ScrollView style={{flex:1,backgroundColor:"#F8F8F8"}}>
       {/* default value of justifyContent is flex-start */}
@@ -74,9 +108,7 @@ const HomeScreen = () => {
           <View style={{flexDirection:'row',alignItems:'center',gap:4}}>
             <Text>Set Your Weekly Fit Goals</Text>
             <Image style={{width:20,height:20,borderRadius:10}}
-            source={{
-              uri:'https://cdn-icons-png.flaticon.com/128/426/426833.png',
-            }}/>
+            source={{uri:'https://cdn-icons-png.flaticon.com/128/426/426833.png'}}/>
           </View>
           <Text style={{marginTop:8,color:'gray'}}>Keep Yourself Fit</Text>
         </View>
@@ -93,13 +125,14 @@ const HomeScreen = () => {
           </Pressable>
         </View>
         <Text style={{marginTop:4,color:'gray'}}>You have no Games Today</Text>
-        <Pressable style={{marginVertical:15,marginLeft:'auto',marginRight:'auto'}}>
+        <Pressable style={{marginVertical:15,marginLeft:'auto',marginRight:'auto'}} 
+        onPress={()=>navigation.navigate("PLAY",{initialOption:"Calendar"})}>
           <Text style={{fontSize: 15,fontWeight: '600',textDecorationLine: 'underline'}}>View My Calender</Text>
         </Pressable>
       </View>
 
       <View style={{padding:13,flexDirection: 'row',alignItems:'center',gap:20}}>
-        <Pressable style={{flex: 1}}>
+        <Pressable style={{flex: 1}} onPress={()=>{navigation.navigate('PLAY')}}>
           <View>
             <Image 
              style={{width: 180,height: 140,borderTopRightRadius: 10,borderTopLeftRadius: 10}}
@@ -112,18 +145,18 @@ const HomeScreen = () => {
             </View>
           </Pressable>
         </Pressable>
-        <Pressable  style={{flex: 1}}>
+        <View style={{flex: 1}}>
           <View style={{borderRadius: 10}}>
             <Image style={{width: 180,height: 140,borderTopRightRadius: 10,borderTopLeftRadius: 10}}
-            source={{uri:'https://images.pexels.com/photos/262524/pexels-photo-262524.jpeg?auto=compress&cs=tinysrgb&w=800'}}/>
+            source={{uri:'https://images.pexels.com/photos/3660204/pexels-photo-3660204.jpeg?auto=compress&cs=tinysrgb&w=800'}}/>
           </View>
-          <Pressable style={{backgroundColor:'white',padding:12,width:180,borderRadius:10}}>
+          <View style={{backgroundColor:'white',padding:12,width:180,borderRadius:10}}>
             <View>
               <Text style={{fontSize: 15, fontWeight: '500'}}>Book</Text>
               <Text style={{fontSize: 15, color: 'gray', marginTop: 7}}>Book you slots in venues nearby</Text>
             </View>
-          </Pressable>
-        </Pressable>
+          </View>
+        </View>
       </View>
       <View style={{padding:13}}>
         <View style={{padding: 10,backgroundColor: 'white',borderRadius: 10,flexDirection: 'row',gap: 10}}>
