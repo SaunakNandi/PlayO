@@ -44,12 +44,11 @@ app.post('/register',async(req,res)=>{
 app.post('/login',async(req,res)=>{
     try {
         const {email,password}=req.body
+        console.log(email,password)
         const user=await User.findOne({email})
         console.log("login ",user)
         if(!user)
             return res.status(401).json({message:'User Not found'})
-        if(user.email!==email)
-            return res.status(401).json({message:'Invalid emilID'})
         if(user.password!==password)
             return res.status(401).json({message:'Invalid Password'})
         const secretKey=crypto.randomBytes(32).toString('hex')
@@ -154,13 +153,17 @@ app.get('/games',async(req,res)=>{
     }
 })
 
+
+// games which I am a part of
 app.get('/upcoming',async(req,res)=>{
     try {
-        const userId='67f932fa08de50415124d565'
+        const userId=req.query.userId
+        console.log("upcoming userId ",userId)
         //  either the user is admin or player
         const games=await Game.find({$or:[{admin:userId},{players:userId}]})
             .populate("admin").populate("players","image firstName lastName")
-            // console.log("games ",games)
+        console.log("upcoming games ",games)
+
         const formattedGames=games.map(game=>({
                 _id:game._id,
                 sport:game.sport,
@@ -176,15 +179,158 @@ app.get('/upcoming',async(req,res)=>{
                 queries:game.queries,
                 requests:game.requests,
                 isBooked:game.isBooked,
+                courtNumber:game.courtNumber,
                 adminName:`${game.admin.firstName} ${game.admin.lastName}`,
+                isUserAdmin:game.admin._id.toString()===userId,
                 adminUrl:game.admin.image,
-                matchFull:game.matchFull
+                matchFull:game.matchFull,
             }
         ))
-        console.log("formattedGames ",formattedGames)
+        // console.log("formattedGames ",formattedGames)
         res.status(200).json(formattedGames)   // Wrong status code can cause unexpected problem
     } catch (error) {
         console.log("Error upcoming",error)
         res.status(500).json({message:'Failed to fetch games'})
+    }
+})
+
+// api to send user a request to accept a particular game
+app.post('/games/:gameId/request',async(req,res)=>{
+    try {
+        const {userId,comment}=req.body
+        console.log("userId and its type ",userId,typeof userId)
+        const {gameId}=req.params
+        const game=await Game.findById(gameId)
+        console.log("game ",game)
+        if(!game)
+            return res.status(400).json({message:"Game not found"})
+        const existingRequest=game?.requests?.find(request=>request.userId.toString()==userId)
+        console.log(existingRequest)
+        if(existingRequest)
+            return res.status(400).json({message:"Request already sent"})
+
+        game.requests.push({userId,comment})
+        await game.save()
+        res.status(200).json({message:"Request sent successfully"})
+    } catch (error) {
+        console.log("Error upcoming",error)
+        res.status(500).json({message:'Failed to send request'})
+    }
+})
+
+// api to show all of the request to admin
+
+app.get('/games/:gameId/requests',async(req,res)=>{
+    try {
+        const {gameId}=req.params;
+        console.log("Request called with game ID",gameId)
+        const game=await Game.findById(gameId).populate({
+            path:'requests.userId',
+            select:'email firstName lastName image skill noOfGames playpals sports'
+        })
+        if(!game) return res.status(400).json({message:"Game not found"})
+        const requestsWithUserInfo=game?.requests?.map(request=>({
+            userId: request.userId._id,
+            email: request.userId.email,
+            firstName: request.userId.firstName,
+            lastName: request.userId.lastName,
+            image: request.userId.image,
+            skill: request.userId.skill,
+            noOfGames: request.userId.noOfGames,
+            playpals: request.userId.playpals,
+            sports: request.userId.sports,
+            comment: request.comment,
+        }))
+        console.log("Requests with User Info ",requestsWithUserInfo)
+        res.status(200).json(requestsWithUserInfo)
+    } catch (error) {
+        console.log('Error',error)
+        res.status(500).json({message:"Falied to get the requests"})
+    }
+})
+
+app.get("/user/:userId",async(req,res)=>{
+    try {
+        const {userId}=req.params
+        const user=await User.findById(userId)
+        if(!user)
+            return res.status(200).json({message:"User not found"})
+        return res.status(200).json({user})
+    } catch (error) {
+        console.log('Error',error)
+        res.status(500).json({message:"Falied to fetch user"})
+    }
+})
+
+app.post('/accept',async(req,res)=>{
+    try {
+        const {gameId,userId}=req.body
+        // console.log("gameId for accept",gameId)
+        const game=await Game.findById(gameId)
+        if(!game)
+            return res.status(404).json('Game not found')
+
+        game.players.push(userId)
+        await Game.findByIdAndUpdate(gameId,{
+            $pull:{requests:{userId:userId}}   // pulling userId from requests
+        },{new:true})
+
+        await game.save()
+        res.status(200).json({message:'Request accepted',game})
+
+    } catch (error) {
+        console.log('Error',error)
+        res.status(500).json({message:"Falied to fetch user"})
+    }
+})
+
+app.get('/game/:gameId/players',async(req,res)=>{
+    try {
+        const {gameId}=req.params
+        const game=await Game.findById(gameId).populate('players')
+        if(!game)
+            return res.status(404).json({message:'Game not found'})
+
+        res.status(200).json(game.players)
+    } catch (error) {
+        console.log('Error',error)
+        res.status(500).json({message:"Falied to fetch players"})
+    }
+})
+
+app.post('/book',async(req,res)=>{
+    try {
+        const {courtNumber,date,time,userId,name,game}=req.body
+        const venue=await Venue.findOne({name})
+
+        if(!venue)
+            return res.status(404).json({message:"Venue not found"})
+        const bookingConflict=venue?.bookings && venue.bookings.find(booking=>booking.courtNumber==courtNumber&& booking.date==date && booking.time==time)
+        if(bookingConflict) return res.status(400).json({message:"Slot already booked"})
+        
+        venue.bookings.push({courtNumber,date,time,user:userId,game})
+        await venue.save()
+        await Game.findByIdAndUpdate(game,{
+            isBooked:true,
+            courtNumber:courtNumber
+        })
+        res.status(200).json({message:"Booking successful",venue})
+    } catch (error) {
+        console.log('Error',error)
+        res.status(500).json({message:"Falied to fetch players"})
+    }
+})
+
+app.post('/toggle-match-full',async(req,res)=>{
+    try {
+        const {gameId}=req.body
+        const game=await Game.findById(gameId)
+        if(!game) return res.status(404).json({message:"Game not found"})
+        game.matchFull=!game.matchFull
+        await game.save()
+        res.status(200).json({message:"Matchfull status updated",matchFull:game.matchFull})
+    } catch (error) {
+        console.log('Error',error)
+        res.status(500).json({message:"Falied to mark matchfull"})
     }
 })

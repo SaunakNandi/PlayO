@@ -41,11 +41,11 @@ const venueSchema=new Schema({
                 required:true
             },
             date:{
-                type:Date,
+                type:String,
                 required:true
             },
             time:{
-                type:Date,
+                type:String,
                 required:true
             },
             user:{
