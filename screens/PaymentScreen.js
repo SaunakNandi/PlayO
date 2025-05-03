@@ -107,9 +107,7 @@ const PaymentScreen = () => {
             <Text>To be paid at venue</Text>
           </View>
           <Text style={{height: 1,borderColor: "#E0E0E0",borderWidth: 3,marginTop: 20}}/>
-          <View
-          style={{ marginLeft: "auto", marginRight: "auto", marginTop: 20 }}
-        >
+          <View style={{ marginLeft: "auto", marginRight: "auto", marginTop: 20 }}>
           <Image
             style={{ width: 100, height: 80, resizeMode: "contain" }}
             source={{

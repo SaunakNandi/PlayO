@@ -140,8 +140,9 @@ const StartScreen = () => {
           <Text style={{fontSize: 20,fontWeight: '500',width: '50%',textAlign: 'center'}}>Find Player in your neighbourhood</Text>
           <Text style={{marginTop: 20, color: 'gray', fontSize: 15}}>Just like you did as kid!</Text>
         </View>
-        <Pressable style={{marginTop: 40,justifyContent: 'center',alignItems: 'center',}}>
-          <Text style={{color:"gray",fontSize:16}}>Already have an account Login</Text>
+        <Pressable style={{marginTop: 40,justifyContent: 'center',alignItems: 'center',}}
+        onPress={()=>navigation.navigate('Login')}>
+          <Text style={{color:"gray",fontSize:16}}>Already have an account? Login</Text>
         </Pressable>
         <View style={{justifyContent: 'center', alignItems: 'center',marginTop:25}}>
           <Image style={{width:110,height:60,resizeMode:'contain'}}

@@ -24,6 +24,10 @@ import CreateActivityScreen from '../screens/CreateActivityScreen'
 import TagVenueScreen from '../screens/TagVenueScreen'
 import SelectTimeScreen from '../screens/SelectTimeScreen'
 import GameSetUpScreens from '../screens/GameSetUpScreens'
+import ManageRequestScreen from '../screens/ManageRequestScreen'
+import SlotScreen from '../screens/SlotScreen'
+import PaymentScreen from '../screens/PaymentScreen'
+import PlayersScreen from '../screens/PlayersScreen'
 const StackNavigator = () => {
     const {token}=useContext(AuthContext)
     const Stack=createNativeStackNavigator()
@@ -93,6 +97,11 @@ const StackNavigator = () => {
                 <Stack.Screen name='TagVenue' component={TagVenueScreen} options={{headerShown:false}}/>
                 <Stack.Screen name='Time' component={SelectTimeScreen}/>
                 <Stack.Screen name='Game' component={GameSetUpScreens} options={{headerShown:false}}/>
+                <Stack.Screen name='Manage' component={ManageRequestScreen} options={{headerShown:false}}/>
+                <Stack.Screen name='Slot' component={SlotScreen} options={{headerShown:false}}/>
+                <Stack.Screen name='Payment' component={PaymentScreen} options={{headerShown:false}}/>
+                <Stack.Screen name='Players' component={PlayersScreen} options={{headerShown:false}}/>
+
             </Stack.Navigator>
         )
     }
